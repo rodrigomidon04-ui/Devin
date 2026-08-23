@@ -23,7 +23,7 @@ const filters: { value: Filter; label: string }[] = [
 ]
 
 export default function App() {
-  const { email, signIn, signOut } = useAuth()
+  const { email, loading: authLoading, signIn, signOut } = useAuth()
   const [items, setItems] = useState<PortfolioItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -63,7 +63,9 @@ export default function App() {
           Portfolio
         </span>
         <div className="flex items-center gap-2">
-          {email ? (
+          {authLoading ? (
+            <div className="h-9 w-24 animate-pulse rounded-full bg-white/5" />
+          ) : email ? (
             <>
               <button
                 type="button"
@@ -136,7 +138,9 @@ export default function App() {
         <div className="rounded-2xl border border-dashed border-white/15 px-6 py-16 text-center">
           <p className="text-lg font-medium text-white">Todavía no hay nada acá</p>
           <p className="mt-2 text-sm text-slate-400">
-            {email
+            {authLoading
+              ? ''
+              : email
               ? 'Tocá “Agregar” para subir tu primera imagen, texto o enlace.'
               : 'Entrá con tu cuenta para subir tus trabajos.'}
           </p>

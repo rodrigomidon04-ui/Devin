@@ -72,7 +72,10 @@ export async function deleteItem(item: PortfolioItem): Promise<void> {
   if (!supabase) return demoStore.remove(item.id)
 
   if (item.storage_path) {
-    await supabase.storage.from(STORAGE_BUCKET).remove([item.storage_path])
+    const { error: storageError } = await supabase.storage
+      .from(STORAGE_BUCKET)
+      .remove([item.storage_path])
+    if (storageError) throw new Error(storageError.message)
   }
   const { error } = await supabase
     .from(ITEMS_TABLE)

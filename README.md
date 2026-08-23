@@ -18,8 +18,9 @@ probar todo, pero los archivos quedan guardados solo en tu navegador.
 1. Entrá a [supabase.com](https://supabase.com) y abrí tu proyecto (o creá uno).
 2. En el menú izquierdo elegí **SQL Editor → New query**.
 3. Copiá y pegá todo el contenido del archivo `supabase/schema.sql` de este
-   repositorio y tocá **Run**. Eso crea la tabla `items`, el bucket `portfolio`
-   y los permisos.
+   repositorio, **cambiá `TU-CORREO@ejemplo.com` por tu correo** (solo ese
+   correo va a poder subir y borrar) y tocá **Run**. Eso crea la tabla `items`,
+   el bucket `portfolio` y los permisos.
 4. Andá a **Authentication → Users → Add user** y creá tu usuario con tu correo
    y una contraseña (marcá "Auto confirm user"). Con ese usuario vas a entrar a
    la página para subir cosas.
