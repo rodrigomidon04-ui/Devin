@@ -71,7 +71,7 @@ export function AddItemModal({ onClose, onCreated }: AddItemModalProps) {
 
   return (
     <Modal title="Agregar al portfolio" onClose={onClose}>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="grid grid-cols-3 gap-2">
           {kinds.map(({ value, label, icon: Icon }) => (
             <button
