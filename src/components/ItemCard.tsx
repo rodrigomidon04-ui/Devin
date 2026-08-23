@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { PortfolioItem } from '../lib/types'
 import { ImageIcon, LinkIcon, TextIcon, TrashIcon } from './Icons'
 
@@ -20,6 +21,24 @@ function hostOf(url: string | null): string {
   } catch {
     return url
   }
+}
+
+function faviconOf(url: string): string {
+  return `https://www.google.com/s2/favicons?sz=128&domain_url=${encodeURIComponent(url)}`
+}
+
+function LinkThumb({ url, title }: { url: string; title: string }) {
+  const [failed, setFailed] = useState(false)
+  if (failed) return <LinkIcon className="h-4 w-4" />
+  return (
+    <img
+      src={faviconOf(url)}
+      alt={title}
+      loading="lazy"
+      onError={() => setFailed(true)}
+      className="h-12 w-12 rounded-xl bg-white/90 object-contain p-1.5"
+    />
+  )
 }
 
 interface ItemCardProps {
@@ -47,7 +66,11 @@ export function ItemCard({ item, canEdit, onOpen, onDelete }: ItemCardProps) {
             />
           ) : (
             <div className="flex flex-col items-center gap-2 text-indigo-300">
-              <KindIcon kind={item.kind} />
+              {item.kind === 'link' && item.url ? (
+                <LinkThumb url={item.url} title={item.title} />
+              ) : (
+                <KindIcon kind={item.kind} />
+              )}
               <span className="text-xs uppercase tracking-wide text-slate-400">
                 {kindLabel[item.kind]}
               </span>
