@@ -101,7 +101,10 @@ export function AddItemModal({ onClose, onCreated }: AddItemModalProps) {
               type="url"
               inputMode="url"
               value={url}
-              onChange={(event) => setUrl(event.target.value)}
+              onChange={(event) => {
+                setUrl(event.target.value)
+                setError(null)
+              }}
               placeholder="https://mi-otra-pagina.com"
               className={inputClass}
             />
@@ -112,7 +115,10 @@ export function AddItemModal({ onClose, onCreated }: AddItemModalProps) {
             <input
               type="file"
               accept={accept[kind]}
-              onChange={(event) => setFile(event.target.files?.[0] ?? null)}
+              onChange={(event) => {
+                setFile(event.target.files?.[0] ?? null)
+                setError(null)
+              }}
               className="w-full rounded-xl border border-dashed border-white/20 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-500 file:px-3 file:py-2 file:text-white"
             />
           </label>
