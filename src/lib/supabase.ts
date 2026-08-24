@@ -5,6 +5,7 @@ const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim()
 
 export const STORAGE_BUCKET = 'portfolio'
 export const ITEMS_TABLE = 'items'
+export const PROFILE_TABLE = 'profile'
 
 export const isSupabaseConfigured = Boolean(url && anonKey)
 
