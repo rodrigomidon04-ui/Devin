@@ -1,5 +1,9 @@
 # Mi Portfolio
 
+> Este repositorio también contiene **[MUNDO CARTÓN](mundo-carton/README.md)**:
+> videos de tutoriales con cartón reciclado y tienda de juguetes y muebles para
+> chicos (carpeta `mundo-carton/`).
+
 Página web personal para mostrar tu portfolio: subís imágenes (PNG, JPG, WEBP),
 archivos de texto (TXT, MD) y enlaces a otras páginas. Funciona en celular,
 tablet y computadora.
