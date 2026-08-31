@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { isSupabaseConfigured } from '../lib/api'
+import { inputClass, labelClass } from './ItemFormModal'
 import { Modal } from './Modal'
 
 interface LoginModalProps {
@@ -12,9 +13,6 @@ export function LoginModal({ onClose, onSignIn }: LoginModalProps) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
-
-  const inputClass =
-    'w-full rounded-xl border border-white/10 bg-slate-950/60 px-4 py-3 text-base text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none'
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
@@ -34,13 +32,13 @@ export function LoginModal({ onClose, onSignIn }: LoginModalProps) {
     <Modal title="Entrar como dueño" onClose={onClose}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {!isSupabaseConfigured ? (
-          <p className="rounded-xl bg-amber-500/15 px-4 py-3 text-sm text-amber-200">
+          <p className="rounded-xl bg-amber-500/15 px-4 py-3 text-sm text-amber-700 dark:text-amber-200">
             Modo demo: todavía no hay Supabase conectado, así que tus archivos se
             guardan solo en este navegador. Escribí cualquier correo para entrar.
           </p>
         ) : null}
 
-        <label className="flex flex-col gap-2 text-sm text-slate-300">
+        <label className={labelClass}>
           Correo
           <input
             type="email"
@@ -53,7 +51,7 @@ export function LoginModal({ onClose, onSignIn }: LoginModalProps) {
         </label>
 
         {isSupabaseConfigured ? (
-          <label className="flex flex-col gap-2 text-sm text-slate-300">
+          <label className={labelClass}>
             Contraseña
             <input
               type="password"
@@ -66,7 +64,7 @@ export function LoginModal({ onClose, onSignIn }: LoginModalProps) {
         ) : null}
 
         {error ? (
-          <p role="alert" className="rounded-xl bg-red-500/15 px-4 py-3 text-sm text-red-200">
+          <p role="alert" className="rounded-xl bg-red-500/15 px-4 py-3 text-sm text-red-700 dark:text-red-200">
             {error}
           </p>
         ) : null}

@@ -29,8 +29,15 @@ export function ItemViewer({ item, onClose }: ItemViewerProps) {
 
   return (
     <Modal title={item.title} onClose={onClose} wide>
+      {item.category ? (
+        <span className="mb-3 inline-block rounded-full bg-indigo-500/15 px-3 py-1 text-xs text-indigo-700 dark:text-indigo-200">
+          {item.category}
+        </span>
+      ) : null}
       {item.description ? (
-        <p className="mb-4 text-sm text-slate-300">{item.description}</p>
+        <p className="mb-4 text-sm text-slate-600 dark:text-slate-300">
+          {item.description}
+        </p>
       ) : null}
 
       {item.kind === 'image' && item.url ? (
@@ -41,14 +48,33 @@ export function ItemViewer({ item, onClose }: ItemViewerProps) {
         />
       ) : null}
 
+      {item.kind === 'video' && item.url ? (
+        <video
+          src={item.url}
+          controls
+          playsInline
+          className="mx-auto max-h-[60dvh] w-full rounded-xl bg-black"
+        />
+      ) : null}
+
+      {item.kind === 'pdf' && item.url ? (
+        <iframe
+          src={item.url}
+          title={item.title}
+          className="h-[60dvh] w-full rounded-xl border border-black/10 bg-white dark:border-white/10"
+        />
+      ) : null}
+
       {item.kind === 'text' ? (
-        <pre className="max-h-[55dvh] overflow-auto whitespace-pre-wrap break-words rounded-xl bg-slate-950/70 p-4 text-sm text-slate-200">
+        <pre className="max-h-[55dvh] overflow-auto whitespace-pre-wrap break-words rounded-xl bg-black/5 p-4 text-sm text-slate-800 dark:bg-slate-950/70 dark:text-slate-200">
           {error ?? text ?? 'Cargando…'}
         </pre>
       ) : null}
 
       {item.kind === 'link' && item.url ? (
-        <p className="break-all text-sm text-slate-300">{item.url}</p>
+        <p className="break-all text-sm text-slate-600 dark:text-slate-300">
+          {item.url}
+        </p>
       ) : null}
 
       {item.url ? (
