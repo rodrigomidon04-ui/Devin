@@ -119,6 +119,21 @@ export default function App() {
     }
   }
 
+  async function handleCreated(item: PortfolioItem) {
+    const next = [item, ...items]
+    setShowAdd(false)
+    if (!items.some((entry) => entry.position != null)) {
+      setItems(next)
+      return
+    }
+    setItems(next.map((entry, position) => ({ ...entry, position })))
+    try {
+      await saveOrder(next)
+    } catch (err) {
+      setError((err as Error).message)
+    }
+  }
+
   async function handleMove(item: PortfolioItem, direction: -1 | 1) {
     const index = items.findIndex((entry) => entry.id === item.id)
     const target = index + direction
@@ -331,10 +346,7 @@ export default function App() {
         <ItemFormModal
           categories={categories}
           onClose={() => setShowAdd(false)}
-          onSaved={(item) => {
-            setItems((current) => [item, ...current])
-            setShowAdd(false)
-          }}
+          onSaved={handleCreated}
         />
       ) : null}
 
