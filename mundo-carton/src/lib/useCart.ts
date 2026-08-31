@@ -4,6 +4,8 @@ import type { CartLine, Product } from './types'
 
 const CART_KEY = 'mundoCarton.cart'
 
+const MAX_QUANTITY = 99
+
 interface StoredLine {
   product: Product
   quantity: number
@@ -47,14 +49,14 @@ export function useCart(): CartState {
       if (!existing) return [...current, { product, quantity: 1 }]
       return current.map((line) =>
         line.product.id === product.id
-          ? { ...line, quantity: line.quantity + 1 }
+          ? { ...line, quantity: Math.min(MAX_QUANTITY, line.quantity + 1) }
           : line,
       )
     })
   }, [])
 
   const setQuantity = useCallback((productId: string, quantity: number) => {
-    const clamped = Math.min(99, Math.max(1, Math.round(quantity)))
+    const clamped = Math.min(MAX_QUANTITY, Math.max(1, Math.round(quantity)))
     setLines((current) =>
       current.map((line) =>
         line.product.id === productId ? { ...line, quantity: clamped } : line,
