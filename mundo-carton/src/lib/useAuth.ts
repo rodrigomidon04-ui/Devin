@@ -4,12 +4,18 @@ import { supabase } from './supabase'
 
 export interface AuthState {
   email: string | null
+  /** Solo el correo dueño puede subir y borrar contenido. */
+  isOwner: boolean
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
 }
 
 const DEMO_EMAIL = 'demo@local'
+
+const OWNER_EMAIL = (import.meta.env.VITE_OWNER_EMAIL || '')
+  .trim()
+  .toLowerCase()
 
 export function useAuth(): AuthState {
   const [email, setEmail] = useState<string | null>(null)
@@ -57,5 +63,9 @@ export function useAuth(): AuthState {
     setEmail(null)
   }, [])
 
-  return { email, loading, signIn, signOut }
+  const isOwner =
+    email !== null &&
+    (!supabase || !OWNER_EMAIL || email.toLowerCase() === OWNER_EMAIL)
+
+  return { email, isOwner, loading, signIn, signOut }
 }

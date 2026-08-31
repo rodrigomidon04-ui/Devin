@@ -4,6 +4,8 @@ import type { CartLine, Product } from './types'
 
 const CART_KEY = 'mundoCarton.cart'
 
+const MAX_QUANTITY = 99
+
 interface StoredLine {
   product: Product
   quantity: number
@@ -33,7 +35,12 @@ export function useCart(): CartState {
   const [lines, setLines] = useState<CartLine[]>(() => readCart())
 
   useEffect(() => {
-    localStorage.setItem(CART_KEY, JSON.stringify(lines))
+    try {
+      localStorage.setItem(CART_KEY, JSON.stringify(lines))
+    } catch {
+      // Si el navegador se queda sin espacio, el pedido sigue funcionando en
+      // esta pestaña aunque no se pueda recordar al recargar.
+    }
   }, [lines])
 
   const add = useCallback((product: Product) => {
@@ -42,19 +49,18 @@ export function useCart(): CartState {
       if (!existing) return [...current, { product, quantity: 1 }]
       return current.map((line) =>
         line.product.id === product.id
-          ? { ...line, quantity: line.quantity + 1 }
+          ? { ...line, quantity: Math.min(MAX_QUANTITY, line.quantity + 1) }
           : line,
       )
     })
   }, [])
 
   const setQuantity = useCallback((productId: string, quantity: number) => {
+    const clamped = Math.min(MAX_QUANTITY, Math.max(1, Math.round(quantity)))
     setLines((current) =>
-      quantity <= 0
-        ? current.filter((line) => line.product.id !== productId)
-        : current.map((line) =>
-            line.product.id === productId ? { ...line, quantity } : line,
-          ),
+      current.map((line) =>
+        line.product.id === productId ? { ...line, quantity: clamped } : line,
+      ),
     )
   }, [])
 

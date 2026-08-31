@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Modal } from './Modal'
 import { TrashIcon, WhatsappIcon } from './Icons'
 import { formatPrice } from '../lib/format'
@@ -11,6 +12,8 @@ interface CartDrawerProps {
 
 export function CartDrawer({ cart, phone, onClose }: CartDrawerProps) {
   const canOrder = cart.lines.length > 0 && Boolean(phone)
+  /** Texto que el usuario está tipeando, para poder borrarlo sin perder la línea. */
+  const [drafts, setDrafts] = useState<Record<string, string>>({})
 
   return (
     <Modal title="Tu pedido" onClose={onClose}>
@@ -39,9 +42,21 @@ export function CartDrawer({ cart, phone, onClose }: CartDrawerProps) {
                 type="number"
                 min={1}
                 max={99}
-                value={quantity}
-                onChange={(event) =>
-                  cart.setQuantity(product.id, Number(event.target.value))
+                value={drafts[product.id] ?? String(quantity)}
+                onChange={(event) => {
+                  const text = event.target.value
+                  setDrafts((current) => ({ ...current, [product.id]: text }))
+                  const parsed = Number(text)
+                  if (text !== '' && Number.isFinite(parsed) && parsed >= 1) {
+                    cart.setQuantity(product.id, parsed)
+                  }
+                }}
+                onBlur={() =>
+                  setDrafts((current) => {
+                    const next = { ...current }
+                    delete next[product.id]
+                    return next
+                  })
                 }
                 className="w-16 rounded-xl border-2 border-black px-2 py-1 text-center"
               />

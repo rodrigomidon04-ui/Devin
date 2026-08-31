@@ -35,7 +35,7 @@ const WHATSAPP_NUMBER = (
 type Section = 'videos' | 'tienda'
 
 export default function App() {
-  const { email, loading: authLoading, signIn, signOut } = useAuth()
+  const { email, isOwner, loading: authLoading, signIn, signOut } = useAuth()
   const cart = useCart()
 
   const [section, setSection] = useState<Section>('videos')
@@ -141,18 +141,20 @@ export default function App() {
               <div className="h-10 w-24 animate-pulse rounded-full bg-carton-100" />
             ) : email ? (
               <>
-                <button
-                  type="button"
-                  onClick={() =>
-                    section === 'videos'
-                      ? setShowAddVideo(true)
-                      : setShowAddProduct(true)
-                  }
-                  className="inline-flex items-center gap-2 rounded-full border-4 border-black bg-toon-pink px-4 py-2 text-sm font-extrabold uppercase text-white transition hover:bg-black"
-                >
-                  <PlusIcon className="h-4 w-4" />
-                  {section === 'videos' ? 'Video' : 'Producto'}
-                </button>
+                {isOwner ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      section === 'videos'
+                        ? setShowAddVideo(true)
+                        : setShowAddProduct(true)
+                    }
+                    className="inline-flex items-center gap-2 rounded-full border-4 border-black bg-toon-pink px-4 py-2 text-sm font-extrabold uppercase text-white transition hover:bg-black"
+                  >
+                    <PlusIcon className="h-4 w-4" />
+                    {section === 'videos' ? 'Video' : 'Producto'}
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   onClick={signOut}
@@ -244,7 +246,7 @@ export default function App() {
               <EmptyState
                 title="Todavía no hay videos acá"
                 hint={
-                  email
+                  isOwner
                     ? 'Tocá “Video” arriba para subir el primero.'
                     : 'Entrá con tu cuenta para subir videos.'
                 }
@@ -255,7 +257,7 @@ export default function App() {
                   <VideoCard
                     key={video.id}
                     video={video}
-                    canEdit={Boolean(email)}
+                    canEdit={isOwner}
                     onOpen={setPlaying}
                     onDelete={handleDeleteVideo}
                   />
@@ -287,7 +289,7 @@ export default function App() {
               <EmptyState
                 title="Todavía no hay productos acá"
                 hint={
-                  email
+                  isOwner
                     ? 'Tocá “Producto” arriba para publicar el primero.'
                     : 'Entrá con tu cuenta para publicar productos.'
                 }
@@ -298,7 +300,7 @@ export default function App() {
                   <ProductCard
                     key={product.id}
                     product={product}
-                    canEdit={Boolean(email)}
+                    canEdit={isOwner}
                     onAdd={(item) => {
                       cart.add(item)
                       setShowCart(true)

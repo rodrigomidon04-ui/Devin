@@ -11,6 +11,15 @@ interface AddVideoModalProps {
 
 type Source = 'link' | 'file'
 
+function isWebUrl(value: string): boolean {
+  try {
+    const parsed = new URL(value)
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
 export function AddVideoModal({ onClose, onCreated }: AddVideoModalProps) {
   const [source, setSource] = useState<Source>('link')
   const [title, setTitle] = useState('')
@@ -26,9 +35,7 @@ export function AddVideoModal({ onClose, onCreated }: AddVideoModalProps) {
     setError(null)
 
     if (source === 'link') {
-      try {
-        new URL(url.trim())
-      } catch {
+      if (!isWebUrl(url.trim())) {
         setError('Pegá una dirección web completa, por ejemplo https://youtu.be/…')
         return
       }
@@ -95,7 +102,8 @@ export function AddVideoModal({ onClose, onCreated }: AddVideoModalProps) {
           <label className="grid gap-1 text-sm font-bold text-black">
             Dirección del video
             <input
-              type="url"
+              type="text"
+              inputMode="url"
               required
               placeholder="https://youtu.be/…"
               value={url}
