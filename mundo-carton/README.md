@@ -45,6 +45,7 @@ inspirado en los canales de dibujos animados.
    | `VITE_SUPABASE_URL` | el Project URL de Supabase |
    | `VITE_SUPABASE_ANON_KEY` | la anon public key |
    | `VITE_WHATSAPP_NUMBER` | tu WhatsApp con código de país, solo números (ej. `59899123456`) |
+   | `VITE_OWNER_EMAIL` | tu correo: solo esa cuenta ve los botones de subir y borrar |
    | `VITE_SITE_TITLE` | el título que querés mostrar (opcional) |
    | `VITE_SITE_SUBTITLE` | la frase debajo del título (opcional) |
 

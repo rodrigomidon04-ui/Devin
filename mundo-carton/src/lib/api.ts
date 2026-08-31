@@ -36,6 +36,15 @@ async function removeFile(path: string | null): Promise<void> {
   if (error) throw new Error(error.message)
 }
 
+/** Borra el archivo recién subido cuando falla el guardado de la fila. */
+async function rollbackUpload(path: string | null): Promise<void> {
+  try {
+    await removeFile(path)
+  } catch {
+    // El error importante es el de la base de datos, no el de la limpieza.
+  }
+}
+
 export async function listVideos(): Promise<Video[]> {
   if (!supabase) return demoStore.listVideos()
   const { data, error } = await supabase
@@ -68,18 +77,21 @@ export async function createVideo(input: NewVideoInput): Promise<Video> {
     })
     .select()
     .single()
-  if (error) throw new Error(error.message)
+  if (error) {
+    await rollbackUpload(storagePath)
+    throw new Error(error.message)
+  }
   return data as Video
 }
 
 export async function deleteVideo(video: Video): Promise<void> {
   if (!supabase) return demoStore.removeVideo(video.id)
-  await removeFile(video.storage_path)
   const { error } = await supabase
     .from(VIDEOS_TABLE)
     .delete()
     .eq('id', video.id)
   if (error) throw new Error(error.message)
+  await rollbackUpload(video.storage_path)
 }
 
 export async function listProducts(): Promise<Product[]> {
@@ -116,18 +128,21 @@ export async function createProduct(input: NewProductInput): Promise<Product> {
     })
     .select()
     .single()
-  if (error) throw new Error(error.message)
+  if (error) {
+    await rollbackUpload(storagePath)
+    throw new Error(error.message)
+  }
   return data as Product
 }
 
 export async function deleteProduct(product: Product): Promise<void> {
   if (!supabase) return demoStore.removeProduct(product.id)
-  await removeFile(product.storage_path)
   const { error } = await supabase
     .from(PRODUCTS_TABLE)
     .delete()
     .eq('id', product.id)
   if (error) throw new Error(error.message)
+  await rollbackUpload(product.storage_path)
 }
 
 export { isSupabaseConfigured }

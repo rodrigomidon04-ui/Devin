@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Modal } from './Modal'
 import { embedUrl } from '../lib/video'
 import { videoCategoryLabel } from '../lib/labels'
@@ -10,6 +11,7 @@ interface VideoPlayerProps {
 
 export function VideoPlayer({ video, onClose }: VideoPlayerProps) {
   const embed = embedUrl(video.video_url)
+  const [failed, setFailed] = useState(false)
 
   return (
     <Modal title={video.title} onClose={onClose} wide>
@@ -28,10 +30,20 @@ export function VideoPlayer({ video, onClose }: VideoPlayerProps) {
             controls
             autoPlay
             playsInline
+            onError={() => setFailed(true)}
             className="aspect-video w-full bg-black"
           />
         )}
       </div>
+      {failed ? (
+        <p
+          role="alert"
+          className="mt-3 rounded-xl border-2 border-black bg-toon-yellow px-3 py-2 text-sm font-bold text-black"
+        >
+          Este video no se pudo cargar. Probá de nuevo o abrilo en otra pestaña.
+        </p>
+      ) : null}
+
       <p className="mt-3 text-xs font-extrabold uppercase tracking-wide text-carton-700">
         {videoCategoryLabel(video.category)}
       </p>

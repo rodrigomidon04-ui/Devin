@@ -65,7 +65,7 @@ export function AddProductModal({ onClose, onCreated }: AddProductModalProps) {
         </label>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <label className="grid gap-1 text-sm font-bold text-black">
+          <label className="grid min-w-0 gap-1 text-sm font-bold text-black">
             Precio
             <input
               type="number"
@@ -77,16 +77,16 @@ export function AddProductModal({ onClose, onCreated }: AddProductModalProps) {
                 setPrice(event.target.value)
                 setError(null)
               }}
-              className="rounded-xl border-2 border-black bg-white px-3 py-2 text-base font-normal outline-none focus:border-toon-pink"
+              className="w-full min-w-0 rounded-xl border-2 border-black bg-white px-3 py-2 text-base font-normal outline-none focus:border-toon-pink"
             />
           </label>
-          <label className="grid gap-1 text-sm font-bold text-black">
+          <label className="grid min-w-0 gap-1 text-sm font-bold text-black">
             Edad recomendada
             <input
               placeholder="3 a 7 años"
               value={ageRange}
               onChange={(event) => setAgeRange(event.target.value)}
-              className="rounded-xl border-2 border-black bg-white px-3 py-2 text-base font-normal outline-none focus:border-toon-pink"
+              className="w-full min-w-0 rounded-xl border-2 border-black bg-white px-3 py-2 text-base font-normal outline-none focus:border-toon-pink"
             />
           </label>
         </div>

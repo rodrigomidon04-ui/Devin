@@ -33,7 +33,12 @@ export function useCart(): CartState {
   const [lines, setLines] = useState<CartLine[]>(() => readCart())
 
   useEffect(() => {
-    localStorage.setItem(CART_KEY, JSON.stringify(lines))
+    try {
+      localStorage.setItem(CART_KEY, JSON.stringify(lines))
+    } catch {
+      // Si el navegador se queda sin espacio, el pedido sigue funcionando en
+      // esta pestaña aunque no se pueda recordar al recargar.
+    }
   }, [lines])
 
   const add = useCallback((product: Product) => {
@@ -49,12 +54,11 @@ export function useCart(): CartState {
   }, [])
 
   const setQuantity = useCallback((productId: string, quantity: number) => {
+    const clamped = Math.min(99, Math.max(1, Math.round(quantity)))
     setLines((current) =>
-      quantity <= 0
-        ? current.filter((line) => line.product.id !== productId)
-        : current.map((line) =>
-            line.product.id === productId ? { ...line, quantity } : line,
-          ),
+      current.map((line) =>
+        line.product.id === productId ? { ...line, quantity: clamped } : line,
+      ),
     )
   }, [])
 
